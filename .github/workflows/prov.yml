@@ -29,7 +29,7 @@ jobs:
           # sha256sum artifact1 artifact2 ... | base64 -w0
           echo "::set-output name=hashes::$(sha256sum helloworld | base64 -w0)"
 
-      - name: Upload artifact1
+      - name: Upload artifact
         uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3.1.0
         with:
           name: helloworld
