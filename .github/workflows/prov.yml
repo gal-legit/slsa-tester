@@ -37,7 +37,7 @@ jobs:
           if-no-files-found: error
           retention-days: 5
 
-  # This step calls the generic workflow to generate provenance.
+  # This step calls the generic workflow to generate provenance .
   provenance:
     permissions: write-all
     needs: [build]
