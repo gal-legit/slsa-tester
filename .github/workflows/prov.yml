@@ -41,7 +41,7 @@ jobs:
   provenance:
     permissions: write-all
     needs: [build]
-    uses: gal-legit/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v0
+    uses: gal-legit/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@4655d16ed36dd2766c0797f3315e00166914b12f
     with:
       base64-subjects: "${{ needs.build.outputs.hashes }}"
       # Set a custom name for the provenance attestation.
