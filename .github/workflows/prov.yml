@@ -8,6 +8,9 @@ jobs:
   # This step builds our artifacts, uploads them to the workflow run, and
   # outputs their digest.
   build:
+    permissions:
+      contents: write
+      packages: write
     outputs:
       hashes: ${{ steps.hash.outputs.hashes }}
     runs-on: ubuntu-latest
@@ -35,6 +38,9 @@ jobs:
 
   # This step calls the generic workflow to generate provenance.
   provenance:
+    permissions:
+      contents: write
+      packages: write
     needs: [build]
     permissions:
       actions: read
