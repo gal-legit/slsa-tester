@@ -4,8 +4,8 @@ on:
     branches:
       - main
 permissions:
-  contents: 'write'
-  packages: 'write'
+  contents: write
+  packages: write
 
 jobs:
   # This step builds our artifacts, uploads them to the workflow run, and
