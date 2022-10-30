@@ -25,12 +25,9 @@ jobs:
         shell: bash
         id: hash
         run: |
-          # sha256sum generates sha256 hash for all artifacts.
-          # base64 -w0 encodes to base64 and outputs on a single line.
-          # sha256sum artifact1 artifact2 ... | base64 -w0
-          echo "::set-output name=hashes::$(sha256sum helloworld | base64 -w0)"
+          echo "hashes=$(sha256sum helloworld | base64 -w0)" >> "$GITHUB_OUTPUT"
 
-      - name: Upload artifact
+      - name: Upload artifact1
         uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3.1.0
         with:
           name: helloworld
@@ -40,30 +37,13 @@ jobs:
 
   # This step calls the generic workflow to generate provenance.
   provenance:
-    permissions: write-all
     needs: [build]
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.2.0
     with:
       base64-subjects: "${{ needs.build.outputs.hashes }}"
-      # Set a custom name for the provenance attestation.
-      attestation-name: "artifacts.intoto.jsonl"
       # Upload provenance to a new release
       upload-assets: true
-
-  # This step uploads our artifacts to the tagged GitHub release.
-  release:
-    permissions: write-all
-    needs: [build, provenance]
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-    steps:
-      - name: Download helloworld
-        uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741 # tag=v2.1.0
-        with:
-          name: helloworld
-
-      - name: Upload assets
-        uses: softprops/action-gh-release@1e07f4398721186383de40550babbdf2b84acfc5 # v0.1.14
-        with:
-          files: |
-            helloworld
